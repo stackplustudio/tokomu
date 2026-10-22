@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ProductRepository } from "@/lib/repositories/product.repository";
+import { Product, ProductCategory } from "@/types/product";
 import ProductCard from "@/components/ui/ProductCard";
 import EmptyState from "@/components/ui/EmptyState";
 import LoadingState from "@/components/ui/LoadingState";
+import ErrorState from "@/components/ui/ErrorState";
 import storeConfig from "@/config/store";
 
 function CatalogContent() {
@@ -22,7 +24,16 @@ function CatalogContent() {
   const [sort, setSort] = useState<"newest" | "price_asc" | "price_desc">(initialSort);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
 
-  const categories = useMemo(() => ProductRepository.findCategories(), []);
+  const [categories, setCategories] = useState<(ProductCategory & { productCount: number })[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Ambil daftar kategori dari REST API (FR-23)
+  useEffect(() => {
+    ProductRepository.findCategories().then(setCategories);
+  }, []);
 
   // Update URL params agar state filter dapat dibagikan / di-bookmark
   const updateURL = (cat: string, q: string, s: string) => {
@@ -36,16 +47,22 @@ function CatalogContent() {
   const handleCategoryChange = (slug: string) => {
     const next = selectedCategory === slug ? "" : slug;
     setSelectedCategory(next);
+    setLoading(true);
+    setError(null);
     updateURL(next, search, sort);
   };
 
   const handleSearchChange = (val: string) => {
     setSearch(val);
+    setLoading(true);
+    setError(null);
     updateURL(selectedCategory, val, sort);
   };
 
   const handleSortChange = (s: "newest" | "price_asc" | "price_desc") => {
     setSort(s);
+    setLoading(true);
+    setError(null);
     updateURL(selectedCategory, search, s);
   };
 
@@ -54,21 +71,60 @@ function CatalogContent() {
     setSelectedCategory("");
     setSort("newest");
     setMaxPrice(undefined);
+    setLoading(true);
+    setError(null);
     router.replace("/products", { scroll: false });
   };
 
-  // Eksekusi filter via ProductRepository (FR-04, FR-05, FR-06)
-  const paginatedResult = useMemo(() => {
-    return ProductRepository.findAll({
+  const fetchProducts = () => {
+    setLoading(true);
+    setError(null);
+    ProductRepository.findAll({
       search,
       category: selectedCategory || undefined,
       maxPrice: maxPrice || undefined,
       sort,
-      limit: 100, // tampilkan semua yang cocok di Fase 1
-    });
+      limit: 100,
+    })
+      .then((res) => {
+        setProducts(res.data);
+        setTotal(res.meta.total);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Gagal memuat produk dari server API.");
+        setLoading(false);
+      });
+  };
+
+  // Eksekusi filter via ProductRepository (FR-21 & FR-24)
+  useEffect(() => {
+    let active = true;
+
+    ProductRepository.findAll({
+      search,
+      category: selectedCategory || undefined,
+      maxPrice: maxPrice || undefined,
+      sort,
+      limit: 100,
+    })
+      .then((res) => {
+        if (!active) return;
+        setProducts(res.data);
+        setTotal(res.meta.total);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!active) return;
+        setError("Gagal memuat data produk dari server API.");
+        setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [search, selectedCategory, maxPrice, sort]);
 
-  const { data: filteredProducts, meta } = paginatedResult;
   const isFiltered = Boolean(search || selectedCategory || maxPrice || sort !== "newest");
 
   return (
@@ -84,7 +140,7 @@ function CatalogContent() {
           </h1>
         </div>
         <p className="text-sm text-gray-500">
-          Menampilkan <span className="font-semibold text-gray-900">{meta.total}</span> produk siap kirim
+          Menampilkan <span className="font-semibold text-gray-900">{total}</span> produk siap kirim
         </p>
       </div>
 
@@ -174,10 +230,14 @@ function CatalogContent() {
         </div>
       </div>
 
-      {/* Grid Produk atau EmptyState */}
-      {filteredProducts.length > 0 ? (
+      {/* Grid Produk, State Loading, State Error, atau EmptyState (FR-10) */}
+      {loading ? (
+        <LoadingState count={8} />
+      ) : error ? (
+        <ErrorState message={error} onRetry={fetchProducts} />
+      ) : products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -200,4 +260,3 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
-

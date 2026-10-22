@@ -8,9 +8,12 @@ export const metadata = {
   description: storeConfig.description,
 };
 
-export default function StorefrontHomePage() {
-  const featuredProducts = ProductRepository.findFeatured(4);
-  const categories = ProductRepository.findCategories();
+export default async function StorefrontHomePage() {
+  const [featuredProducts, categories, allProducts] = await Promise.all([
+    ProductRepository.findFeatured(4),
+    ProductRepository.findCategories(),
+    ProductRepository.findAll(),
+  ]);
 
   return (
     <div className="space-y-20 sm:space-y-28 pb-16">
@@ -148,7 +151,7 @@ export default function StorefrontHomePage() {
             href="/products"
             className="text-xs font-bold uppercase tracking-wider text-[#0053F1] hover:underline whitespace-nowrap"
           >
-            Lihat Semua Produk ({ProductRepository.findAll().meta.total}) →
+            Lihat Semua Produk ({allProducts.meta.total}) →
           </Link>
         </div>
 

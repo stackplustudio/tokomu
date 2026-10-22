@@ -10,7 +10,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const product = ProductRepository.findBySlug(slug);
+  const product = await ProductRepository.findBySlug(slug);
 
   if (!product) {
     return {
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = ProductRepository.findBySlug(slug);
+  const product = await ProductRepository.findBySlug(slug);
 
   // FR-07: slug tidak dikenal atau produk tidak aktif menampilkan 404
   if (!product || !product.isActive) {

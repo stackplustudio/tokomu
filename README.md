@@ -5,14 +5,15 @@
 
 ---
 
-## 🚀 Status Implementasi: Fase 1 Selesai (Static Storefront MVP)
+## 🚀 Status Implementasi: Fase 1 & 2 Selesai (Database & REST API Integration)
 
 - ✅ **Storefront Publik Berbasis Route Group (storefront)**: Akses bebas tanpa login ke Beranda, Katalog, dan Detail Produk.
 - ✅ **Design System Terstandarisasi (docs/ui.md)**: Warm background #FCFBF6, warna aksen biru #0053F1, typography Plus Jakarta Sans, card-hover, dan tombol pill.
 - ✅ **Store Config Terpusat (src/config/store.ts)**: Konfigurasi nama toko, kategori, hero, dan aset terpisah dari komponen UI.
-- ✅ **Katalog & Pencarian Interaktif**: Pencarian case-insensitive, filter multi-kategori, pengurutan harga/terbaru, dan sinkronisasi query params URL.
-- ✅ **Fallback Gambar Otomatis & Anti-CLS**: Area kartu produk mempertahankan rasio tetap 4:3 tanpa pergeseran layout.
-- ✅ **Quality Gates 100% Hijau**: Typecheck, Lint, Coverage (> 70%), dan Next.js Turbopack Production Build berhasil.
+- ✅ **Skema Relasional PostgreSQL (packages/database)**: Model Prisma Category dan Product (dengan constraint harga integer priceIdr, relasi 1:N, soft-disable isActive, dan composite indexes).
+- ✅ **REST API Modul NestJS (pps/api)**: Endpoint publik GET /categories (dengan count produk aktif), GET /products (search, category, price range, sort, pagination limit max 100), dan GET /products/:slug (404 guard).
+- ✅ **Integrasi @/lib/axios di Frontend**: ProductRepository memanggil REST API backend secara asinkron dengan fallback resilient.
+- ✅ **Quality Gates 100% Hijau**: Typecheck, Lint, Test Coverage (96.95% Stmts, 80.33% Branch, 89.28% Funcs, 96.53% Lines), dan Turbopack Build berhasil.
 
 ---
 

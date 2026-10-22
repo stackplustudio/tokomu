@@ -17,3 +17,40 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  priceIdr    Int      // Disimpan dalam rupiah penuh (integer) untuk mencegah floating point issue
+  stock       Int      @default(0)
+  sku         String?  @unique
+  imageUrls   String[] @default([])
+  badge       String?  // Contoh: 'New', 'Featured'
+  isFeatured  Boolean  @default(false)
+  isActive    Boolean  @default(true) // Soft-disable, produk tidak dihapus permanen
+  attributes  Json?    // Atribut dinamis: { brand, material, colors, sizes, etc }
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isActive, categoryId])
+  @@index([slug])
+}
