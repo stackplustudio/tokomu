@@ -1,3 +1,21 @@
+﻿# 👟 Tokomu — Blueprint Toko Online dengan AI
+
+> **Single-Vendor E-Commerce Blueprint by Stack Plus Studio**  
+> Dibangun di atas **Stack Plus Studio Core Engine V1.0 (Maincore)**. Dimulai sebagai toko sepatu, teruji kelas produksi, dan dirancang untuk portofolio teknis serta reusabilitas klien.
+
+---
+
+## 🚀 Status Implementasi: Fase 1 Selesai (Static Storefront MVP)
+
+- ✅ **Storefront Publik Berbasis Route Group (storefront)**: Akses bebas tanpa login ke Beranda, Katalog, dan Detail Produk.
+- ✅ **Design System Terstandarisasi (docs/ui.md)**: Warm background #FCFBF6, warna aksen biru #0053F1, typography Plus Jakarta Sans, card-hover, dan tombol pill.
+- ✅ **Store Config Terpusat (src/config/store.ts)**: Konfigurasi nama toko, kategori, hero, dan aset terpisah dari komponen UI.
+- ✅ **Katalog & Pencarian Interaktif**: Pencarian case-insensitive, filter multi-kategori, pengurutan harga/terbaru, dan sinkronisasi query params URL.
+- ✅ **Fallback Gambar Otomatis & Anti-CLS**: Area kartu produk mempertahankan rasio tetap 4:3 tanpa pergeseran layout.
+- ✅ **Quality Gates 100% Hijau**: Typecheck, Lint, Coverage (> 70%), dan Next.js Turbopack Production Build berhasil.
+
+---
+
 # 🚀 Stack Plus Studio - Core Engine V1.0 (Fullstack Monorepo)
 
 Boilerplate Fullstack Web Development kelas *Enterprise* dan *Production-Ready* yang dirancang khusus untuk mempercepat inisiasi proyek klien di **Stack Plus Studio**.

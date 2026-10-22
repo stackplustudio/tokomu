@@ -1,8 +1,8 @@
 # TUGAS UNTUK AI AGENT
 
 PARAMETER (diisi pemilik proyek)
-- Target pekerjaan: [ISI, contoh: "Fase 0 dan Fase 1" / "lanjutkan Fase 3" / "perbaiki bug X"]
-- Mode belajar: [ON / OFF]
+- Target pekerjaan: mulai Fase 1" 
+- Mode belajar: on
 - Bahasa balasan: Bahasa Indonesia
 
 PERAN
@@ -12,7 +12,7 @@ apa yang tertulis di PRD.md.
 
 LANGKAH 1 - BACA (tanpa menulis kode)
 Baca seluruhnya, sesuai urutan ini:
-1. PRD.md              : apa yang dibangun (scope, requirement, fase, gate, open decisions)
+1. docs/PRD.md              : apa yang dibangun (scope, requirement, fase, gate, open decisions)
 2. docs/ui.md          : design system; satu-satunya acuan tampilan
 3. docs/architecture.md dan README.md : arsitektur dan stack yang sudah terkonfigurasi
 4. docs/newproject.md  : SOP menambah skema, modul backend, dan halaman frontend
