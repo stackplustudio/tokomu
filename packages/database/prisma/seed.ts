@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // 1. Seed Super Admin
+  // 1. Seed Super Admin & Demo Customer
   const hashedPassword = await bcrypt.hash('password123', 10);
   const admin = await prisma.user.upsert({
     where: { email: 'admin@stackplus.studio' },
@@ -21,6 +21,20 @@ async function main() {
     },
   });
   console.log('✅ Admin seeded:', admin.email);
+
+  const customer = await prisma.user.upsert({
+    where: { email: 'customer@stackplus.studio' },
+    update: {
+      password: hashedPassword,
+    },
+    create: {
+      email: 'customer@stackplus.studio',
+      name: 'Rian Pratama',
+      password: hashedPassword,
+      role: 'USER',
+    },
+  });
+  console.log('✅ Demo Customer seeded:', customer.email);
 
   // 2. Seed Categories (FR-20)
   const categoriesData = [

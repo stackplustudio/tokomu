@@ -22,8 +22,7 @@ export default function StoreNavbar() {
     { label: "BERANDA", href: "/" },
     { label: "SEMUA PRODUK", href: "/products" },
     { label: "SNEAKERS", href: "/products?category=sneakers" },
-    { label: "RUNNING", href: "/products?category=running-shoes" },
-    { label: "CASUAL", href: "/products?category=casual-shoes" },
+    { label: "PESANAN SAYA", href: "/orders" },
   ];
 
   return (
@@ -71,11 +70,31 @@ export default function StoreNavbar() {
             })}
           </nav>
 
-          {/* CTA Kanan (Dark Pill - ui.md §8.1) */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* CTA Kanan: Keranjang & Beli Sekarang (ui.md §8.1) */}
+          <div className="hidden sm:flex items-center gap-2">
+            <Link
+              href="/cart"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#EAE5D9] bg-white text-xs font-semibold text-gray-700 hover:text-[#0053F1] hover:border-[#0053F1]/40 transition-all shadow-xs"
+              aria-label="Keranjang Belanja"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              <span>Keranjang</span>
+            </Link>
+
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 bg-[#2A2724] text-white px-5 py-2.5 rounded-full text-xs font-semibold hover:bg-black transition-all"
+              className="inline-flex items-center gap-2 bg-[#2A2724] text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-black transition-all"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
               Beli Sekarang
@@ -117,7 +136,14 @@ export default function StoreNavbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 border-t border-[#EAE5D9]">
+            <div className="pt-2 border-t border-[#EAE5D9] space-y-2">
+              <Link
+                href="/cart"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#FCFBF6] border border-[#EAE5D9] text-gray-800 py-3 rounded-full text-xs font-semibold hover:bg-gray-100 transition-all"
+              >
+                🛒 Keranjang Belanja
+              </Link>
               <Link
                 href="/products"
                 onClick={() => setMobileMenuOpen(false)}
