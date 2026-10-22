@@ -1,0 +1,2 @@
+# Trivy ignore rules — Maincore
+.env.example

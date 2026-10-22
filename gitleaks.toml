@@ -1,0 +1,24 @@
+# Gitleaks configuration — Maincore
+#
+# Extends gitleaks' default ruleset and adds an allowlist for files that
+# contain *placeholders*, not real credentials.
+# Real secrets anywhere else in the repo will fail the CI gate.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Files containing documented placeholders/example values only"
+paths = [
+  '''\.env\.example$''',
+  '''\.gitleaks\.toml$''',
+  '''gitleaks\.toml$''',
+  '''handover\.md$''',
+  '''README\.md$''',
+  '''docs/.*\.md$''',
+  '''perf/.*''',
+  '''PERF-TESTING\.md$''',
+  '''\.github/workflows/.*\.ya?ml$''',
+  '''.*\.spec\.ts$''',
+  '''.*\.e2e-spec\.ts$''',
+]

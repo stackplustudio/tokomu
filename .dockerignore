@@ -1,0 +1,25 @@
+# Git & IDE
+.git
+.gitignore
+.idea
+.vscode
+
+# Environment files & Secrets
+.env
+.env.*
+!.env.example
+
+# Local caches & outputs
+node_modules
+.turbo
+dist
+.next
+build
+coverage
+playwright-report
+test-results
+
+# Documentation & Logs
+*.log
+*.md
+
